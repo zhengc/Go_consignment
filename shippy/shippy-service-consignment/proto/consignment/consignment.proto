@@ -1,0 +1,36 @@
+syntax = "proto3";
+/*
+The first line of the file specifies that you're using proto3 syntax: if you don't do this the protocol buffer compiler will assume you are using proto2.
+This must be the first non-empty, non-comment line of the file.
+ */
+package consignment;
+
+// service should contain the methods I wish to expose to other services
+service ShippingService {
+  rpc CreateConsignment(Consignment) returns (Response) {}
+}
+
+// each message is my data structure
+message Consignment {
+  string id = 1;
+  string description = 2;
+  int32 weight = 3;
+  repeated Container containers = 4;
+  string vessel_id = 5;
+}
+
+message Container {
+  string id = 1;
+  string customer_id = 2;
+  string origin = 3;
+  string user_id = 4;
+}
+
+message Response {
+  bool created = 1;
+  Consignment consignment = 2;
+}
+
+/*
+Protoc CLI: protoc -I. --go_out=plugins=grpc:. \proto/consignment/consignment.proto
+ */
